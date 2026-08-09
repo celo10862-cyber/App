@@ -58,12 +58,13 @@ jobs:
 
       - name: Create signing properties
         run: |
-          cat <<EOF > android/keystore.properties
-          storeFile=app/release.keystore
-          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          EOF
+              cat <<EOF > android/keystore.properties
+              storeFile=release.keystore
+              storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+              keyAlias=${{ secrets.KEY_ALIAS }}
+              keyPassword=${{ secrets.KEY_PASSWORD }}
+              
+              EOF
 
       - name: Build Debug APK
         working-directory: android
