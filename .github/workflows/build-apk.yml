@@ -43,14 +43,23 @@ jobs:
       - name: Grant Gradle permission
         run: chmod +x android/gradlew
 
-      - name: Decode keystore
+      - name: Generate release keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
+          keytool -genkeypair \
+            -v \
+            -keystore android/app/release.keystore \
+            -alias "${{ secrets.KEY_ALIAS }}" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -keypass "${{ secrets.KEY_PASSWORD }}" \
+            -dname "CN=Pocket AI Studio, OU=AI, O=PocketAI, L=Kathmandu, ST=Bagmati, C=NP"
 
       - name: Create signing properties
         run: |
           cat <<EOF > android/keystore.properties
-          storeFile=release.keystore
+          storeFile=app/release.keystore
           storePassword=${{ secrets.KEYSTORE_PASSWORD }}
           keyAlias=${{ secrets.KEY_ALIAS }}
           keyPassword=${{ secrets.KEY_PASSWORD }}
